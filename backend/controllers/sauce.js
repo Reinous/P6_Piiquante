@@ -2,14 +2,31 @@ const Sauce = require('../models/sauce');
 
 //Creation d'une nouvelle sauce
 exports.createSauce = (req, res, next) => {
-	console.log(req.body);
+	const sauceObject = JSON.parse(req.body.sauce);
+	delete sauceObject._id;
+	console.log(sauceObject);
 	const sauce = new Sauce({
-		...req.body,
+		...sauceObject,
+		//...req.body.sauce,
+		imageUrl: `${req.protocol}://${req.get('host')}/images/${
+			req.file.filename
+		}`,
+		usersLiked: [' '],
+		usersdisLiked: [' '],
 	});
+	console.log(sauceObject);
 	sauce
 		.save()
-		.then(() => res.status(201).json({ message: 'Sauce sauvegarder' }))
-		.catch((error) => res.status(400).json({ error }));
+		.then(() => {
+			res.status(201).json({
+				message: 'Post saved successfully!',
+			});
+		})
+		.catch((error) => {
+			res.status(400).json({
+				error: error,
+			});
+		});
 };
 
 //Liste de toutes les sauces
