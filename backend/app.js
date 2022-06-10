@@ -1,9 +1,8 @@
 const express = require('express');
-//const bodyParser = require('body-parser');
+const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const app = express();
 const path = require('path');
-//const { json } = require('express');
 
 const sauceRoutes = require('./routes/sauce');
 const userRoutes = require('./routes/user');
@@ -28,8 +27,8 @@ app.use((req, res, next) => {
 	);
 	next();
 });
-//app.use(bodyParser.urlencoded({ extended: true }));
-//app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 
 app.use('/images', express.static(path.join(__dirname, 'images')));
 
