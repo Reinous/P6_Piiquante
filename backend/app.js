@@ -4,12 +4,24 @@ const mongoose = require('mongoose');
 const app = express();
 const path = require('path');
 
+//Helmet pour 'Stoppez le cross-site scripting (XSS)' pour HttpOnly
+const helmet = require('helmet');
+app.use(helmet());
+
+// const rateLimit = require('express-rate-limit');
+// app.use(rateLimit);
+
+//importation du package pour utilisez les variable d'environnement
+const dotenv = require('dotenv');
+dotenv.config();
+
 const sauceRoutes = require('./routes/sauce');
 const userRoutes = require('./routes/user');
+const rateLimit = require('./middleware/rateLimit');
 
 mongoose
 	.connect(
-		'mongodb+srv://Reinous:sdt9jH9fo23CDtom@go-fullstact-cours.qgcvfg5.mongodb.net/?retryWrites=true&w=majority',
+		`mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@${process.env.DB_CLUSTER}.mongodb.net/?retryWrites=true&w=majority`,
 		{ useNewUrlParser: true, useUnifiedTopology: true }
 	)
 	.then(() => console.log('Connexion à MongoDB réussie !'))
